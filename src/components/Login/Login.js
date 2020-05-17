@@ -1,26 +1,47 @@
 import React from 'react';
 import * as yup from 'yup';
 import { Formik } from 'formik';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Alert } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import estilos from './estilos';
+import axios from 'axios';
+//import { useNavigation } from '@react-navigation/native';
 
 export default class Login extends React.Component {
     handleSubmit = (values) => {
-        console.log(values);
+    axios
+    .post('https://revendoowebapi.azurewebsites.net/login', values)
+    .then(res => {
+      if (res.status == 200) {
+        Alert.alert('', 'Login realizado com sucesso.');
+        console.log('', 'Login realizado com sucesso.');
+        AsyncStorage.setItem('token', res.data)
+          .then(value => {
+            navigation.navigate('Produtos');
+          })
+          .catch(err =>
+            Alert.alert('Erro', 'Não foi possível realizar essa operação.')
+          );
+
+      }
+    })
+    .catch(err => {
+      Alert.alert('Erro', err);
+      console.log('Erro', err);
+    });
     }
     render() {
+        //const navigation = useNavigation();
         return (
             <Formik
-            initialValues={{ email: '', password: '' }}
+            initialValues={{ username: '', senha: '' }}
             validationSchema={yup.object().shape({
-                email: yup
-                    .string()
-                    .email()
+                username: yup
+                    .string()                    
                     .required(),
-                password: yup
+                senha: yup
                     .string()
-                    .min(6)
+                    .min(3)
                     .required(),
             })}
             onSubmit={values => this.handleSubmit(values)}>
@@ -35,23 +56,23 @@ export default class Login extends React.Component {
                             <TextInput
                                 mode='flat'
                                 style={estilos.input}
-                                value={values.email}
+                                value={values.username}
                                 label='E-mail'
-                                onChangeText={text => setFieldValue('email', text)}
+                                onChangeText={text => setFieldValue('username', text)}
                                 />
 
                             <TextInput
                                 mode='flat'
                                 style={estilos.input}
-                                value={values.password}
+                                value={values.senha}
                                 label='Senha'
-                                onChangeText={text => setFieldValue('password', text)}
+                                onChangeText={text => setFieldValue('senha', text)}
                                 />
                             <Button
                                 mode='contained'
                                 color='#00059c'
                                 style={estilos.botao}
-                                disabled={!isValid}
+                                //disabled={!isValid}
                                 onPress={handleSubmit}>
                                 LOGIN
                             </Button>
