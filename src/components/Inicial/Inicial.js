@@ -5,7 +5,7 @@ export default class Inicial extends React.Component {
     render() {
         return (
             <Text>
-            ALO 2
+            ALO
             </Text>
             );
     }

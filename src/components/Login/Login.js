@@ -1,27 +1,31 @@
 import React from 'react';
 import * as yup from 'yup';
 import { Formik } from 'formik';
-import { View, Text, Image, Alert } from 'react-native';
+import { View, Text, Image, Alert, AsyncStorage } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import estilos from './estilos';
 import axios from 'axios';
-//import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-export default class Login extends React.Component {
-    handleSubmit = (values) => {
+
+export default function Login ({ navigation }) {
+    
+
+    const handleSubmit = function(values) {
     axios
     .post('https://revendoowebapi.azurewebsites.net/login', values)
     .then(res => {
       if (res.status == 200) {
-        Alert.alert('', 'Login realizado com sucesso.');
-        console.log('', 'Login realizado com sucesso.');
+        Alert.alert('Success', 'Login realizado com sucesso.');
+        console.log('Success', 'Login realizado com sucesso.');
         AsyncStorage.setItem('token', res.data)
           .then(value => {
-            navigation.navigate('Produtos');
-          })
-          .catch(err =>
+            navigation.navigate('Clientes');
+        })
+        .catch(err =>
             Alert.alert('Erro', 'Não foi possível realizar essa operação.')
-          );
+        );
+        navigation.navigate("Clientes");
 
       }
     })
@@ -30,8 +34,8 @@ export default class Login extends React.Component {
       console.log('Erro', err);
     });
     }
-    render() {
-        //const navigation = useNavigation();
+
+        
         return (
             <Formik
             initialValues={{ username: '', senha: '' }}
@@ -44,7 +48,7 @@ export default class Login extends React.Component {
                     .min(3)
                     .required(),
             })}
-            onSubmit={values => this.handleSubmit(values)}>
+            onSubmit={values => handleSubmit(values)}>
 
             {
                 ({ handleSubmit, values, setFieldValue, isValid }) => (
@@ -95,5 +99,5 @@ export default class Login extends React.Component {
             
             </Formik>
         );
-    }
+    
 }
