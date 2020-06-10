@@ -5,6 +5,7 @@ import { View, Text, Image, Alert, AsyncStorage } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import estilos from './estilos';
 import axios from 'axios';
+import guestClient from '../../apiAuth/guestClient'
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -12,13 +13,14 @@ export default function Login ({ navigation }) {
     
 
     const handleSubmit = function(values) {
-    axios
-    .post('https://revendoowebapi.azurewebsites.net/login', values)
+    const client = guestClient;
+    client
+    .post('login', values)
     .then(res => {
       if (res.status == 200) {
         Alert.alert('Success', 'Login realizado com sucesso.');
         console.log('Success', 'Login realizado com sucesso.');
-        AsyncStorage.setItem('token', res.data)
+        AsyncStorage.setItem('tokenData', res.data)
           .then(value => {
             navigation.navigate('Clientes');
         })
