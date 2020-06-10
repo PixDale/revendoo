@@ -1,20 +1,21 @@
 import axios from 'axios';
-import { Alert } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
-import { apiConfig } from '../config/config'; const getAccessToken = async () => {
+import { Alert, AsyncStorage } from 'react-native';
+import { apiConfig } from '../config/config'; 
+
+const getAccessToken = async () => {
   try {
     const retrievedItem = await AsyncStorage.getItem('tokenData');
     if (retrievedItem !== null) {
-      const item = JSON.parse(retrievedItem);
-      console.log(item);
-      const authorization = `Bearer ${item.token}`;
+      const authorization = `Bearer ${retrievedItem}`;
       // We have data!!
       return authorization;
-    } return null;
+    } 
+    return null;
   } catch (error) {
     // Error retrieving data
   }
-}; const loginClient = axios.create({
+};
+const loginClient = axios.create({
   baseURL: apiConfig.baseUrl,
   headers: {
     Accept: 'application/json',

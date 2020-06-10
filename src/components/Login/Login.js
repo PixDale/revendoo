@@ -20,7 +20,7 @@ export default function Login ({ navigation }) {
       if (res.status == 200) {
         Alert.alert('Success', 'Login realizado com sucesso.');
         console.log('Success', 'Login realizado com sucesso.');
-        AsyncStorage.setItem('tokenData', res.data)
+        AsyncStorage.setItem('tokenData', res.data.token)
           .then(value => {
             navigation.navigate('Clientes');
         })
