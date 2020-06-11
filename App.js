@@ -29,6 +29,13 @@ export default function AppContainer() {
     <Stack.Screen
     name="Clientes"
     component={Clientes}
+    options={{
+      title: 'CLIENTES',
+      headerTintColor: "#fff",
+      headerStyle: {
+        backgroundColor: "#a037b3"
+      }
+    }}
     />
 
     </Stack.Navigator>
