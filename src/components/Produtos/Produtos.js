@@ -167,7 +167,7 @@ function ProdutoDetalhes({ route, navigation }) {
                 />
                 <TextInput
                     mode='flat'
-                    value={new Date(pItem.validade).toLocaleDateString()}
+                    value={pItem.validade}
                     label='Validade'
                     onChangeText={text => handleChangeText('validade', text)}
                 />
