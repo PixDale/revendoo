@@ -8,7 +8,7 @@ const estilos = StyleSheet.create({
         padding: 15,
         backgroundColor: '#FFFFFF'
     },
-    botao: {
+    listItem: {
         flexDirection: "row",
         alignItems: "center",
         padding: 24,
@@ -43,6 +43,25 @@ const estilos = StyleSheet.create({
         color: 'white',
     },
     scrollView: { 
+        padding: 10
+    },
+    inputDetalhes: {
+        marginBottom: 10
+    },
+    inline: {
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    inlineItem: {
+        flex: 1,
+    },
+    centerItem: {
+        flex: 0.05
+    },
+    botao: {
+
     }
   });
 
