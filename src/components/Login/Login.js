@@ -17,10 +17,11 @@ export default function Login ({ navigation }) {
     .post('login', values)
     .then(res => {
       if (res.status == 200) {
+        let user = res.data;
         console.log('Success', 'Login realizado com sucesso.');
         AsyncStorage.setItem('tokenData', res.data.token)
           .then(value => {
-            navigation.navigate('Clientes');
+            navigation.navigate('Menu',{user})
         })
         .catch(err =>
             Alert.alert('Erro', 'Não foi possível realizar essa operação.')
@@ -33,7 +34,6 @@ export default function Login ({ navigation }) {
     });
     }
 
-        
         return (
             <Formik
             initialValues={{ username: '', senha: '' }}
@@ -72,7 +72,7 @@ export default function Login ({ navigation }) {
                                 />
                             <Button
                                 mode='contained'
-                                color='#00059c'
+                                color = '#590b9e'
                                 style={estilos.botao}
                                 //disabled={!isValid}
                                 onPress={handleSubmit}>
@@ -80,13 +80,13 @@ export default function Login ({ navigation }) {
                             </Button>
                             <Button
                             mode='outlined'
-                            color='#00059c'
+                            color='#590b9e'
                             style={estilos.botao}>
                                 ESQUECI MINHA SENHA
                             </Button>
                             <Button
                             mode='contained'
-                            color='#00059c'
+                            color='#590b9e'
                             style={estilos.botao}>
                                 CADASTRAR COM E-MAIL
                             </Button>

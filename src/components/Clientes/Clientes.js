@@ -89,8 +89,6 @@ function ClienteDetalhes({ route, navigation }) {
     return (
         <View style={estilos.container}>
             <ScrollView style={estilos.scrollView}>
-                <Text>Teste do cliente</Text>
-                <Text>{JSON.stringify(clienteItem)}</Text>
                 <TextInput
                     mode='flat'
                     value={clienteItem.nome}
