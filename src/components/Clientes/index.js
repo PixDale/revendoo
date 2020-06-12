@@ -1,1 +1,1 @@
-export { default as Clientes } from './Clientes';
+export { Clientes , ClienteDetalhes } from './Clientes';

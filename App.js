@@ -1,7 +1,7 @@
 import React from 'react';
 import { Login } from './src/components/Login'
 import { Inicial}  from './src/components/Inicial';
-import { Clientes } from './src/components/Clientes';
+import { Clientes, ClienteDetalhes } from './src/components/Clientes';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -31,6 +31,17 @@ export default function AppContainer() {
     component={Clientes}
     options={{
       title: 'CLIENTES',
+      headerTintColor: "#fff",
+      headerStyle: {
+        backgroundColor: "#a037b3"
+      }
+    }}
+    />
+    <Stack.Screen
+    name="ClienteDetalhes"
+    component={ClienteDetalhes}
+    options={{
+      title: 'CLIENTE',
       headerTintColor: "#fff",
       headerStyle: {
         backgroundColor: "#a037b3"

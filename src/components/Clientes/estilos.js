@@ -4,7 +4,7 @@ import { screenConfig } from '../../config/config';
 const estilos = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: "center",
         padding: 15,
         backgroundColor: '#FFFFFF'
     },
@@ -23,7 +23,7 @@ const estilos = StyleSheet.create({
     titulo: {
         fontSize: 24,
         color: '#3333FF',
-        marginRight: 0.1 * screenConfig.deviceWidth,
+        marginRight: 20,
     },
     nome: {
         flex: 1,
@@ -36,6 +36,13 @@ const estilos = StyleSheet.create({
     },
     input: {
         
+    },
+    actionButtonIcon: {
+        fontSize: 20,
+        height: 22,
+        color: 'white',
+    },
+    scrollView: { 
     }
   });
 
