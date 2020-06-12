@@ -20,7 +20,7 @@ export default function Login({ navigation }) {
                     let user = res.data;
                     console.log('Success', 'Login realizado com sucesso.');
                     AsyncStorage.setItem('tokenData', res.data.token)
-                        .then(value => {
+                        .then(() => {
                             navigation.navigate('Menu', { user })
                         })
                         .catch(err =>
@@ -73,7 +73,7 @@ export default function Login({ navigation }) {
 
                         <Button
                             mode='contained'
-                            color='#590b9e'
+                            color='#00059c'
                             style={estilos.botao}
                             //disabled={!isValid}
                             onPress={handleSubmit}>
@@ -82,13 +82,13 @@ export default function Login({ navigation }) {
 
                         <Button
                             mode='outlined'
-                            color='#590b9e'
+                            color='#00059c'
                             style={estilos.botao}>
                             ESQUECI MINHA SENHA
                             </Button>
                         <Button
                             mode='contained'
-                            color='#590b9e'
+                            color='#00059c'
                             style={estilos.botao}
                             onPress={() => navigation.navigate('CadastroUsuario')}>
                             CADASTRAR USUARIO

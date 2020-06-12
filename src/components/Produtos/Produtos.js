@@ -11,7 +11,6 @@ import ActionButton from 'react-native-action-button';
 function Produtos({ navigation }) {
 
     const [produtos, setProdutos] = useState([]);
-    const [listaProdutos, setListaProdutos] = useState([]);
     const [busca, setBusca] = useState('');
 
     useEffect(() => {
@@ -19,28 +18,12 @@ function Produtos({ navigation }) {
     }, [])
 
     const getProdutos = async () => {
-        var cliente = await getLoginClient()
-        cliente.get("api/produtos")
+        var client = await getLoginClient()
+        client.get("api/produtos")
             .then(res => {
                 console.log(res);
                 setProdutos(res.data);
-                setListaProdutos(res.data);
             })
-    };
-
-    const filtrarLista = text => {
-        //Testar se é necessário esse if, ou se o filter ja retorna a lista inteira 
-        //caso text esteja vazio
-        if (text === '') {
-            setListaProdutos(produtos);
-            return
-        }
-        const novaLista = produtos.filter(item => {
-            const itemNome = `${item.nome.toUpperCase()}`;
-            const textBusca = text.toUpperCase();
-            return itemNome.indexOf(textBusca) > -1;
-        });
-        setListaProdutos(novaLista);
     };
 
     const visualizaProdutos = (produtoItem) => {
@@ -48,26 +31,26 @@ function Produtos({ navigation }) {
             produtoItem
         })
     }
-
+    const listaFiltrada = produtos.filter(item => item.nome.toUpperCase().includes(busca.toUpperCase()));
 
     return (
         <View style={estilos.container}>
             <Searchbar
                 style={estilos.input}
                 placeholder="Digite o nome do produto"
-                onChangeText={text => filtrarLista(text)}
+                onChangeText={text => setBusca(text)}
             />
             <FlatList
-                data={listaProdutos}
+                data={listaFiltrada}
                 keyExtractor={item => item.produtoId.toString()}
                 renderItem={
                     ({ item, index }) =>
                         //Se for o ultimo item não coloca a borda cinza embaixo
                         <TouchableOpacity
-                            style={[estilos.botao, produtos.length - 1 == index ? estilos.botaoSemBorda : estilos.botaoComBorda]}
+                            style={[estilos.listItem, produtos.length - 1 == index ? estilos.botaoSemBorda : estilos.botaoComBorda]}
                             onPress={() => visualizaProdutos(item)}>
-                            <Image style = {{width: 50, height: 50}} 
-                            source={{ uri: item.caminhoFoto}}/>
+                            <Image style={{ width: 50, height: 50 }}
+                                source={{ uri: item.caminhoFoto }} />
                             <Text style={estilos.nome}> {item.nome} </Text>
                             <Text style={estilos.seta}> &gt; </Text>
                         </TouchableOpacity>
@@ -77,7 +60,7 @@ function Produtos({ navigation }) {
                 <ActionButton.Item
                     buttonColor="#a037b3"
                     title="Novo produto"
-                    onPress={() => alert("Teste")}>
+                    onPress={() => visualizaProdutos({})}>
                     <Icon name="md-add-circle" style={estilos.actionButtonIcon} />
                 </ActionButton.Item>
             </ActionButton>
@@ -88,52 +71,126 @@ function Produtos({ navigation }) {
 
 function ProdutoDetalhes({ route, navigation }) {
     const { produtoItem } = route.params;
+
+    const [pItem, setProdutos] = useState({});
+
+    useEffect(() => {
+        setProdutos(produtoItem);
+    }, [])
+
+    const handleChangeText = (field, text) => {
+        let copia = JSON.parse(JSON.stringify(pItem));
+        copia[field] = text;
+
+        if (field === 'precoCusto' || field === 'precoVenda') {
+            copia[field] = parseFloat(text);
+        }
+        if (field === 'quantidade') {
+            copia[field] = parseInt(text);
+        }
+
+        setProdutos(copia);
+    }
+
+    const handleProduto = async newProduto => {
+        var client = await getLoginClient()
+        if (newProduto.produtoId) {
+            client.put("api/produtos/" + pItem.produtoId, JSON.stringify(pItem), { headers: { 'Content-Type': 'application/json' } })
+                .then(res => {
+                    console.log(res);
+                    navigation.replace('Produtos');
+                })
+                .catch(erro => {
+                    console.log(erro);
+                });
+        } else {
+            client.post("api/produtos", JSON.stringify(pItem), { headers: { 'Content-Type': 'application/json' } })
+                .then(res => {
+                    console.log(res);
+                    navigation.replace('Produtos');
+                })
+                .catch(erro => {
+                    console.log(erro);
+                });
+        }
+    }
+    const handleDeleteProduto = async produtoId => {
+        var client = await getLoginClient()
+        client.delete("api/produtos/" + produtoId)
+            .then(res => {
+                console.log(res);
+                navigation.replace('Produtos');
+            })
+            .catch(erro => {
+                console.log(erro);
+            });
+    }
+
     return (
         <View style={estilos.container}>
             <ScrollView style={estilos.scrollView}>
                 <TextInput
                     mode='flat'
-                    value={produtoItem.nome}
+                    value={pItem.nome}
                     label='Nome'
-                //onChangeText={text => setFieldValue('username', text)}
+                    onChangeText={text => handleChangeText('nome', text)}
                 />
                 <TextInput
                     mode='flat'
-                    value={produtoItem.marca}
+                    value={pItem.marca}
                     label='Marca'
-                //onChangeText={text => setFieldValue('username', text)}
+                    onChangeText={text => handleChangeText('marca', text)}
                 />
                 <TextInput
                     mode='flat'
-                    value={produtoItem.descricao}
+                    value={pItem.descricao}
                     label='Descrição'
-                //onChangeText={text => setFieldValue('username', text)}
+                    onChangeText={text => handleChangeText('descricao', text)}
                 />
                 <TextInput
                     mode='flat'
-                    value={produtoItem.precoCusto}
+                    value={pItem.precoCusto}
                     label='Preço de Custo'
-                //onChangeText={text => setFieldValue('username', text)}
+                    onChangeText={text => handleChangeText('precoCusto', text)}
                 />
                 <TextInput
                     mode='flat'
-                    value={produtoItem.precoVenda}
+                    value={pItem.precoVenda}
                     label='Preço de Venda'
-                //onChangeText={text => setFieldValue('username', text)}
+                    onChangeText={text => handleChangeText('precoVenda', text)}
                 />
                 <TextInput
                     mode='flat'
-                    value={produtoItem.quantidade}
+                    value={pItem.quantidade}
                     label='Quantidade'
-                //onChangeText={text => setFieldValue('username', text)}
+                    onChangeText={text => handleChangeText('quantidade', text)}
                 />
                 <TextInput
                     mode='flat'
-                    value={new Date(produtoItem.validade).toLocaleDateString()}
+                    value={new Date(pItem.validade).toLocaleDateString()}
                     label='Validade'
-                //onChangeText={text => setFieldValue('username', text)}
+                    onChangeText={text => handleChangeText('validade', text)}
                 />
-
+                {!pItem.produtoId && <TextInput
+                    mode='flat'
+                    value={pItem.caminhoFoto}
+                    label='URL Imagem'
+                    onChangeText={text => handleChangeText('caminhoFoto', text)}
+                />}
+                <Button
+                    mode='contained'
+                    color='#00059c'
+                    style={[estilos.botao, { marginBottom: 10 }]}
+                    onPress={() => handleProduto(pItem)}>
+                    {pItem.produtoId ? 'Editar' : 'Adicionar'}
+                </Button>
+                {pItem.produtoId && <Button
+                    mode='outlined'
+                    color='#00059c'
+                    style={estilos.botao}
+                    onPress={() => handleDeleteProduto(pItem.produtoId)}>
+                    Excluir
+                        </Button>}
             </ScrollView>
         </View>
     );
