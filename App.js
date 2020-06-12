@@ -4,6 +4,7 @@ import { Inicial}  from './src/components/Inicial';
 import { Clientes, ClienteDetalhes } from './src/components/Clientes';
 import { Produtos, ProdutoDetalhes } from './src/components/Produtos';
 import { Menu } from './src/components/Menu';
+import { CadastroUsuario } from './src/components/CadastroUsuario';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -78,6 +79,18 @@ export default function AppContainer() {
     component={Menu}
     options={{
       title: 'Menu',
+      headerTintColor: "#fff",
+      headerStyle: {
+        backgroundColor: "#a037b3"
+      }
+    }}
+    />
+
+    <Stack.Screen
+    name="CadastroUsuario"
+    component={CadastroUsuario}
+    options={{
+      title: 'Cadastro de Usuário',
       headerTintColor: "#fff",
       headerStyle: {
         backgroundColor: "#a037b3"
